@@ -1,0 +1,17 @@
+# Build output and tool caches
+/build/
+/app/build/
+.gradle/
+.kotlin/
+local.properties
+*.iml
+.idea/
+.externalNativeBuild/
+.cxx/
+captures/
+
+# Secrets: never commit. Real values live in ../keys/ and in GitHub Secrets.
+keystore.properties
+*.jks
+*.keystore
+*.base64.txt

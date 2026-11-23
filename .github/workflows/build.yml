@@ -1,0 +1,46 @@
+name: Build
+
+# Check build on every push and pull request (tags are handled by release.yml).
+on:
+  push:
+    branches: ['**']
+    tags-ignore: ['**']
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      # Debug build is signed with a throw-away debug key; the release build is only a compile check
+      # (it stays unsigned here because the real key is used only in release.yml).
+      - name: Build
+        run: ./gradlew --no-daemon assembleDebug assembleRelease
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: DimWall-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error

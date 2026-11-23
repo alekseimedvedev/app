@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Window theme only (shown before Compose draws). The real UI theme is in Theme.kt. -->
+    <style name="Theme.DimWall" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>
